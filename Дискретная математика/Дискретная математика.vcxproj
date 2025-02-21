@@ -132,6 +132,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Discrete-ErrorCheck.ixx" />
+    <ClCompile Include="Discrete-Interpreter.cpp" />
+    <ClCompile Include="Discrete-Interpreter.ixx" />
     <ClCompile Include="Discrete-ParseExpression.cpp" />
     <ClCompile Include="Discrete-ParseExpression.ixx" />
     <ClCompile Include="Discrete-Types.cpp" />

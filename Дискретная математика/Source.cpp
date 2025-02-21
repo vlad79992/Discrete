@@ -8,8 +8,9 @@ int main()
 	while (true)
 	{
 		std::string str;
-		std::getline(std::cin, str);
-		std::cout << prs::isSet(str) << std::endl;
+		str = cli::ReadLine();
+		std::cout << str << std::endl;
+		//std::cout << prs::isSet(str) << std::endl;
 		//er::checkBrackets(str);
 	}
 }

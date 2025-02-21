@@ -4,12 +4,14 @@ module Discrete:ParseExpression;
 
 std::set<std::string> prs::getNames(std::string expression)
 {
+	//ещё не придумал
 	std::set<std::string> names;
 	return names;
 }
 
 bool prs::isNumber(const std::string& value)
 {
+	//проверяет правильность написания числа
 	if (value.empty())
 		return false;
 
@@ -33,6 +35,9 @@ bool prs::isNumber(const std::string& value)
 
 bool prs::isName(const std::string& value)
 {
+	//проверяет правильность написания имени
+	// имя должно начинаться только с буквы или подчеркивания,
+	// содержать буквы, цифры и подчеркивания
 	if (value.empty())
 		return false;
 
@@ -52,6 +57,7 @@ bool isValidSubset(const std::string& subset);
 
 bool prs::isSet(const std::string& value)
 {
+	//проверяет правильность написания множества
 	//{(x, y), (u, v)}
 	//{}
 	bool completed = false;
@@ -95,10 +101,31 @@ bool prs::isSet(const std::string& value)
 	return completed;
 }
 
+std::string prs::DeleteWhitespace(const std::string& str)
+{
+	//удаляет пробелы в начале и конце строки
+	int first_symbol, last_symbol;
+	for (int i = 0; i < str.size(); ++i)
+		if (!std::isspace(str[i]))
+		{
+			first_symbol = i;
+			break;
+		}
+
+	for (int i = str.size() - 1; i >= 0; --i)
+		if (!std::isspace(str[i]))
+		{
+			last_symbol = i;
+			break;
+		}
+	return str.substr(first_symbol, last_symbol - first_symbol + 1);
+}
+
 bool isValidElement(const std::string& elem);
 
 bool isValidSubset(const std::string& subset)
 {
+	//проверяет правильность написания подмножества
 	//(x, y, z)
 	std::string elem;
 
@@ -127,21 +154,8 @@ bool isValidSubset(const std::string& subset)
 
 bool isValidElement(const std::string& elem)
 {
-	int first_symbol, last_symbol;
-	for (int i = 0; i < elem.size(); ++i)
-		if (!std::isspace(elem[i]))
-		{
-			first_symbol = i;
-			break;
-		}
-
-	for (int i = elem.size() - 1; i >= 0; --i)
-		if (!std::isspace(elem[i]))
-		{
-			last_symbol = i;
-			break;
-		}
-
-	return prs::isName(elem.substr(first_symbol, last_symbol - first_symbol + 1)) || \
-		prs::isNumber(elem.substr(first_symbol, last_symbol - first_symbol + 1));
+	//проверяет правильность написания элемента множества
+	//	(он должен быть либо числом, либо правильным именем)
+	return prs::isName(prs::DeleteWhitespace(elem)) || \
+		prs::isNumber(prs::DeleteWhitespace(elem));
 }
