@@ -9,6 +9,43 @@ std::set<std::string> prs::getNames(std::string expression)
 	return names;
 }
 
+inline bool is_operator(const char c)
+{
+	return c == '+' || c == '-' || c == '*' || c == '/'
+		|| c == '^' || c == '(' || c == ')' || c == '='
+		|| c == '{' || c == '}' || c == ',';
+}
+
+std::vector<std::string> prs::parseExpression(const std::string& expression)
+{
+	//разделяет строку на подстроки, состоящие из чисел, имён, операторов
+	std::vector<std::string> tokens;
+
+	std::string cur_token;
+
+	for (char c : expression)
+	{
+		if (std::isspace(c) || is_operator(c))
+		{
+			if (!cur_token.empty())
+			{
+				tokens.push_back(prs::deleteWhitespace(cur_token));
+				cur_token = "";
+			}
+			if (is_operator(c))
+				tokens.push_back({ c });
+		}
+		else
+		{
+			cur_token.push_back(c);
+		}
+	}
+	if (!cur_token.empty())
+		tokens.push_back(prs::deleteWhitespace(cur_token));
+
+	return tokens;
+}
+
 bool prs::isNumber(const std::string& value)
 {
 	//проверяет правильность написания числа
@@ -101,7 +138,7 @@ bool prs::isSet(const std::string& value)
 	return completed;
 }
 
-std::string prs::DeleteWhitespace(const std::string& str)
+std::string prs::deleteWhitespace(const std::string& str)
 {
 	//удаляет пробелы в начале и конце строки
 	int first_symbol, last_symbol;
@@ -156,6 +193,6 @@ bool isValidElement(const std::string& elem)
 {
 	//проверяет правильность написания элемента множества
 	//	(он должен быть либо числом, либо правильным именем)
-	return prs::isName(prs::DeleteWhitespace(elem)) || \
-		prs::isNumber(prs::DeleteWhitespace(elem));
+	return prs::isName(prs::deleteWhitespace(elem)) || \
+		prs::isNumber(prs::deleteWhitespace(elem));
 }

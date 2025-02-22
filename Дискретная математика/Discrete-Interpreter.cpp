@@ -11,7 +11,7 @@ std::string cli::ReadLine(std::istream& is)
 	std::string buf, line;
 
 	std::getline(is, buf);
-	buf = prs::DeleteWhitespace(buf);
+	buf = prs::deleteWhitespace(buf);
 
 	line.reserve(buf.size());
 
