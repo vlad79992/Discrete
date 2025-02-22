@@ -23,9 +23,9 @@ inline char oppositeBracket(const char bracket)
 	// если открывающая скобка, то прибавляется 1, в обратном случае отнимается 1
 }
 
-void bracketsError(std::pair<char, int> bracket);
+void bracketsError(std::pair<char, int> bracket, std::ostream& os);
 
-bool er::checkBrackets(const std::string& expression)
+bool er::checkBrackets(const std::string& expression, std::ostream& os)
 {
 	// ( ); [ ]; { }; < >
 	std::deque<std::pair<char, int>> brackets; // type, pos
@@ -42,20 +42,29 @@ bool er::checkBrackets(const std::string& expression)
 		}
 		// закрывающие скобки
 		if (brackets.empty()) // нет никаких скобок
-			return bracketsError({c, i}), false;
+			return bracketsError({c, i}, os), false;
 		if (c != oppositeBracket(brackets.back().first)) // предыдущая скобка - не правильная открывающая
-			return bracketsError(brackets.back()), false;
+			return bracketsError(brackets.back(), os), false;
 		else
 			brackets.pop_back();
 	}
 
 	if (!brackets.empty())
-		return bracketsError(brackets.back()), false;
+		return bracketsError(brackets.back(), os), false;
 
 	return true;
 }
 
-void bracketsError(std::pair<char, int> bracket)
+bool er::checkNames(const std::vector<std::string>& tokens, std::ostream& os)
+{
+	for (const auto tk : tokens)
+	{
+
+	}
+	return true;
+}
+
+void bracketsError(std::pair<char, int> bracket, std::ostream& os)
 {
 	for (int i = 0; i < bracket.second; ++i) std::cout << ' '; // помещаем курсор на нужную позицию
 	

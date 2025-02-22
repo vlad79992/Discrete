@@ -2,12 +2,6 @@
 
 module Discrete:ParseExpression;
 
-std::set<std::string> prs::getNames(std::string expression)
-{
-	//ещё не придумал
-	std::set<std::string> names;
-	return names;
-}
 
 inline bool is_operator(const char c)
 {
@@ -90,58 +84,56 @@ bool prs::isName(const std::string& value)
 	return true;
 }
 
-bool isValidSubset(const std::string& subset);
+bool isValidSubset(const std::vector<std::string>& subset);
 
-bool prs::isSet(const std::string& value)
+bool prs::isSet(const std::vector<std::string>& tokens)
 {
 	//проверяет правильность написания множества
 	//{(x, y), (u, v)}
 	//{}
-	bool completed = false;
-	std::stringstream sstr{ value };
-	char cur;
-	std::string subset;
+	std::vector<std::string> subset;
 	
-	sstr >> cur;
-	if (cur != '{')
+	if (tokens.empty() 
+		|| tokens.front() != "{" || tokens.back() != "}")
 		return false;
 
-	sstr >> cur; // первый символ внутри множества
-	subset.push_back(cur);
-
-	while (sstr.get(cur))
+	for (int i = 1; i < tokens.size() - 1; ++i)
 	{
-		if (cur != sstr.eof() && completed)
-			return false;
-
-		if (cur == '}')
+		if (tokens[i] == "}")
 		{
-			if (subset.empty())
-				completed = true;
+			// закрывающий символ до окончания множества
+			// возможно в будущем придется добавить поддержку множеств, состоящих из множеств
+			// нвверное это избыточная функция, проверка скобок достаточно хорошо проверяет всё
+			return false;
+		}
+		if (tokens[i] != ",")
+			subset.push_back(tokens[i]);
+		
+		if (subset.empty())
+		{
+			if (tokens[i] == ",")
+				continue;
 			else
+				// между подмножествами нет запятой
 				return false;
+		}
 
+		if (tokens[i] == ")")
+		{
+			isValidSubset(subset);
+			subset.clear();
 			continue;
 		}
-		if (!std::isspace(cur))
-			subset.push_back(cur);
-		
-		if (cur == ')')
-		{
-			if (isValidSubset(subset))
-				subset = "";
-			else
-				return false;
-		}
+
 	}
 
-	return completed;
+	return true;
 }
 
 std::string prs::deleteWhitespace(const std::string& str)
 {
 	//удаляет пробелы в начале и конце строки
-	int first_symbol, last_symbol;
+	int first_symbol = -1, last_symbol = -1;
 	for (int i = 0; i < str.size(); ++i)
 		if (!std::isspace(str[i]))
 		{
@@ -155,38 +147,42 @@ std::string prs::deleteWhitespace(const std::string& str)
 			last_symbol = i;
 			break;
 		}
+
+	if (first_symbol == -1 && last_symbol == -1)
+		// пустая строка
+		return "";
+
 	return str.substr(first_symbol, last_symbol - first_symbol + 1);
 }
 
 bool isValidElement(const std::string& elem);
 
-bool isValidSubset(const std::string& subset)
+bool isValidSubset(const std::vector<std::string>& subset)
 {
 	//проверяет правильность написания подмножества
 	//(x, y, z)
-	std::string elem;
+	bool has_value = false;
 
 	if (subset.empty())
 		return false;
 
-	if (subset[0] != '(')
-		return false;
-
-	if (subset.back() != ')')
+	if (subset[0] != "(" || subset.back() != ")")
 		return false;
 
 	for (int i = 1; i < subset.size() - 1; ++i)
 	{
-		if (subset[i] != ',')
-			elem.push_back(subset[i]);
+		if (subset[i] != "," && has_value)
+			// два значения подряд без запятой
+			return false;
+		if (subset[i] != "," && !isValidElement(subset[i]))
+			// элемент не является запятой, именем, или числом
+			return false;
+		if (subset[i] == ",")
+			has_value = false;
 		else
-		{
-			if (isValidElement(elem))
-				elem = "";
-			else
-				return false;
-		}
+			has_value = true;
 	}
+	return true;
 }
 
 bool isValidElement(const std::string& elem)

@@ -63,7 +63,6 @@ discrete::Set::Set(const std::string& name, const std::string& value)
 
 void discrete::Set::SetValue(const std::string& value)
 {
-	prs::isSet(value);
 }
 
 void discrete::Set::PrintValue(std::ostream& os)
