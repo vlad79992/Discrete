@@ -60,5 +60,7 @@ export namespace discrete
 		Set(const std::string& name, const std::string& value = "{}");
 		void SetValue(const std::string& value);
 		void PrintValue(std::ostream& os = std::cout);
+		void Reverse();
+		std::vector<std::vector<std::string>> Composition(const discrete::Set& other);
 	};
 }

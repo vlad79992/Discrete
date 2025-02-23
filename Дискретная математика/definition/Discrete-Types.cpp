@@ -1,4 +1,4 @@
-
+#include <set>
 
 module Discrete:Types;
 
@@ -68,4 +68,32 @@ void discrete::Set::SetValue(const std::string& value)
 void discrete::Set::PrintValue(std::ostream& os)
 {
 
+}
+
+void discrete::Set::Reverse()
+{
+	for (int i = 0; i < this->value.size(); i++) 
+	{
+		std::reverse(this->value[i].begin(), this->value[i].end());
+	}
+}
+
+std::vector<std::vector<std::string>> discrete::Set::Composition(const discrete::Set& other)
+{
+	// композиция
+	std::vector<std::vector<std::string>> composition;
+	std::set<std::vector<std::string>> used;
+	for (const auto& str1 : this->value) 
+	{
+		for (const auto& str2 : other.value) 
+		{
+			if (!used.contains({ str1[0], str2[1]}))
+			{
+				used.insert({ str1[0], str2[1]});
+				composition.push_back({ str1[0], str2[1]});
+			}
+		}
+	}
+
+	return composition;
 }

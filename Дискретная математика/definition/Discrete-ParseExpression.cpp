@@ -6,8 +6,15 @@ module Discrete:ParseExpression;
 inline bool is_operator(const char c)
 {
 	return c == '+' || c == '-' || c == '*' || c == '/'
-		|| c == '^' || c == '(' || c == ')' || c == '='
-		|| c == '{' || c == '}' || c == ',';
+		|| c == '^' || c == '<' || c == '>' || c == '='
+		|| c == '%' || c == '!';
+}
+
+inline bool is_bracket(const char c)
+{
+	return c == '(' || c == ')'
+		|| c == '{' || c == '}'
+		|| c == '[' || c == ']';
 }
 
 std::vector<std::string> prs::parseExpression(const std::string& expression)
@@ -19,14 +26,14 @@ std::vector<std::string> prs::parseExpression(const std::string& expression)
 
 	for (char c : expression)
 	{
-		if (std::isspace(c) || is_operator(c))
+		if (std::isspace(c) || is_operator(c) || is_bracket(c) || c == ',')
 		{
 			if (!cur_token.empty())
 			{
 				tokens.push_back(prs::deleteWhitespace(cur_token));
 				cur_token = "";
 			}
-			if (is_operator(c))
+			if (is_operator(c) || is_bracket(c) || c == ',')
 				tokens.push_back({ c });
 		}
 		else
@@ -38,6 +45,24 @@ std::vector<std::string> prs::parseExpression(const std::string& expression)
 		tokens.push_back(prs::deleteWhitespace(cur_token));
 
 	return tokens;
+}
+
+std::vector<std::string> prs::convertParsed(const std::vector<std::string>& expression)
+{
+	// преобразует два элемента ">" и "=" в ">=" и т.д.
+	std::vector<std::string> converted;
+
+	for (int i = 1; i < expression.size(); ++i)
+	{
+		if (expression[i] == "=" && is_operator(expression[i - 1][0]))
+		{
+			converted.back().append(expression[i]);
+			continue;
+		}
+		converted.push_back(expression[i]);
+	}
+
+	return converted;
 }
 
 bool prs::isNumber(const std::string& value)
