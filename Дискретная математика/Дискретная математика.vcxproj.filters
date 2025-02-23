@@ -24,25 +24,25 @@
     <ClCompile Include="Discrete-ErrorCheck.ixx">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="initialization\Discrete-ErrorCheck.cpp">
+    <ClCompile Include="definition\Discrete-ErrorCheck.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Discrete-ParseExpression.ixx">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="initialization\Discrete-ParseExpression.cpp">
+    <ClCompile Include="definition\Discrete-ParseExpression.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Discrete-Types.ixx">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="initialization\Discrete-Types.cpp">
+    <ClCompile Include="definition\Discrete-Types.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Discrete-Interpreter.ixx">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="initialization\Discrete-Interpreter.cpp">
+    <ClCompile Include="definition\Discrete-Interpreter.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
