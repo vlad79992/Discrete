@@ -6,36 +6,19 @@
 module Discrete:ErrorCheck;
 
 
-inline bool isBracket(const char c)
-{
-	return (c == '(' || c == '[' || c == '{' || c == '<' || c == ')' || c == ']' || c == '}' || c == '>');
-}
-
-inline bool isOpeningBracket(const char c)
-{
-	return (c == '(' || c == '[' || c == '{' || c == '<');
-}
-
-inline char oppositeBracket(const char bracket)
-{
-	const std::vector<char> brackets = { '(', ')', '[', ']', '{', '}', '<', '>' };
-	return *(std::find(brackets.begin(), brackets.end(), bracket) + (2 * isOpeningBracket(bracket)) - 1);
-	// если открывающая скобка, то прибавляется 1, в обратном случае отнимается 1
-}
-
 void bracketsError(std::pair<char, int> bracket, std::ostream& os);
 
 bool er::checkBrackets(const std::string& expression, std::ostream& os)
 {
-	// ( ); [ ]; { }; < >
+	// ( ); [ ]; { }
 	std::deque<std::pair<char, int>> brackets; // type, pos
 	for (int i = 0; i < expression.size(); ++i)
 	{
 		char c = expression[i];
-		if (!isBracket(c))
+		if (!is_bracket(c))
 			continue;
 		// открывающие скобки
-		if (isOpeningBracket(c))
+		if (is_opening_bracket(c))
 		{
 			brackets.push_back({ c, i });
 			continue;
@@ -43,7 +26,7 @@ bool er::checkBrackets(const std::string& expression, std::ostream& os)
 		// закрывающие скобки
 		if (brackets.empty()) // нет никаких скобок
 			return bracketsError({c, i}, os), false;
-		if (c != oppositeBracket(brackets.back().first)) // предыдущая скобка - не правильная открывающая
+		if (c != opposite_bracket(brackets.back().first)) // предыдущая скобка - не правильная открывающая
 			return bracketsError(brackets.back(), os), false;
 		else
 			brackets.pop_back();
@@ -70,6 +53,6 @@ void bracketsError(std::pair<char, int> bracket, std::ostream& os)
 	
 	std::cout << "^\n";
 
-	std::cout << "No " << ((isOpeningBracket(bracket.first)) ? "closing" : "opening") << " bracket '" \
-		<< oppositeBracket(bracket.first) << '\'' << std::endl;
+	std::cout << "No " << ((is_opening_bracket(bracket.first)) ? "closing" : "opening") << " bracket '" \
+		<< opposite_bracket(bracket.first) << '\'' << std::endl;
 }

@@ -2,12 +2,11 @@
 
 module Discrete:ParseExpression;
 
-
 inline bool is_operator(const char c)
 {
 	return c == '+' || c == '-' || c == '*' || c == '/'
 		|| c == '^' || c == '<' || c == '>' || c == '='
-		|| c == '%' || c == '!';
+		|| c == '%' || c == '!' || c == '\\';
 }
 
 inline bool is_bracket(const char c)
@@ -16,6 +15,18 @@ inline bool is_bracket(const char c)
 		|| c == '{' || c == '}'
 		|| c == '[' || c == ']';
 }
+
+inline bool is_opening_bracket(const char c)
+{
+	return (c == '(' || c == '[' || c == '{');
+}
+
+inline char opposite_bracket(const char bracket)
+{
+	const std::vector<char> brackets = { '(', ')', '[', ']', '{', '}' };
+	return *(std::find(brackets.begin(), brackets.end(), bracket) + (2 * (int) is_opening_bracket(bracket)) - 1);
+	// если открывающая скобка, то прибавляется 1, в обратном случае отнимается 1
+}	
 
 std::vector<std::string> prs::parseExpression(const std::string& expression)
 {
@@ -63,6 +74,61 @@ std::vector<std::string> prs::convertParsed(const std::vector<std::string>& expr
 	}
 
 	return converted;
+}
+
+std::vector<std::string> prs::SolveExpression(const std::vector<std::string>& expression)
+{
+	std::vector<std::string> opened_brackets;
+
+
+	while (true)
+	{
+		std::vector<std::string> in_brackets; // вектор для хранения содержимого скобок
+		int brackets_count = 0;
+		bool found_bracket = false;
+
+		for (const auto& str : expression)
+		{
+			if (is_bracket(str[0]))
+			{
+				found_bracket = true;
+				if (!is_opening_bracket(str[0]))
+				{
+					brackets_count--;
+					if (brackets_count != 0)
+						in_brackets.push_back(str);
+					else
+					{
+						for (const auto& solved_str : SolveExpression(in_brackets))
+							opened_brackets.push_back(solved_str);
+					}
+				}
+				else
+				{
+					if (brackets_count != 0)
+						in_brackets.push_back(str);
+					brackets_count++;
+				}
+			}
+			else if (brackets_count != 0)
+			{
+				in_brackets.push_back(str);
+			}
+			else
+			{
+				opened_brackets.push_back(str);
+			}
+		}
+
+		if (!found_bracket)
+			break;
+	}
+
+	std::vector<std::string> solved_expression;
+
+	// решить
+
+	return solved_expression;
 }
 
 bool prs::isNumber(const std::string& value)

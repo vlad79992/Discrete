@@ -1,12 +1,12 @@
 export module Discrete:Interpreter;
 
 import :ParseExpression;
+import :Types;
 
-import "set";
+import "map";
 import "string";
 import "iostream";
-
-std::set<std::string> type_names, function_names, variable_names;
+import "vector";
 
 export namespace cli
 {
