@@ -13,7 +13,7 @@ int main()
 		{
 			std::cout << "\"" << x << "\" ";
 		}
-		std::cout << " - is " << (!(prs::isSet(prs::parseExpression(str))) ? ("not") : ("")) << " a set";
+		std::cout << " — is " << (!(prs::isSet(prs::parseExpression(str))) ? ("not") : ("")) << " a set";
 		std::cout << std::endl;
 		//std::cout << prs::isSet(str) << std::endl;
 		//er::checkBrackets(str);
